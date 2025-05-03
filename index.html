@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Upload</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Upload Your Certificate</h1>
+    <input type="file" id="certificateUpload" accept=".pdf,.jpg,.png">
+    <button onclick="uploadCertificate()">Upload</button>
+    <script src="script.js"></script>
+</body>
+</html>
+npm init -y
+npm install express multer cors
+
+const express = require('express');
+const multer = require('multer');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
+
+app.post('/upload', upload.single('certificate'), (req, res) => {
+    res.json({ message: 'File uploaded successfully', filename: req.file.filename });
+});
+
+app.listen(3000, () => console.log('Server running on port 3000'));
+
+async function uploadCertificate() {
+    const fileInput = document.getElementById('certificateUpload');
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('certificate', file);
+
+    try {
+        let response = await fetch('http://localhost:3000/upload', {
+            method: 'POST',
+            body: formData
+        });
+        let result = await response.json();
+        alert(result.message);
+    } catch (error) {
+        console.error('Upload failed', error);
+    }
+}
+
+node server.js
+
+
