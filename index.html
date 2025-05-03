@@ -1,0 +1,112 @@
+I'll help you update the profile page with all these changes. Let's make these modifications one by one:
+
+[page]
+Now let's create the certificates page (Page 2) with the requested design and functionality:
+
+[page]
+Now let's create the final thank you page (Page 3):
+
+[page]
+Now let's set up the database for storing certificates and visitor tracking:
+
+```sql
+-- Add categories for certificates
+CREATE TABLE certificate_categories (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    user_id TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Add certificates table
+CREATE TABLE certificates (
+    id SERIAL PRIMARY KEY,
+    serial_number TEXT NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT,
+    image_url TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by TEXT NOT NULL,
+    category TEXT DEFAULT 'Professional',
+    file_url TEXT,
+    file_type TEXT,
+    view_count INTEGER DEFAULT 0,
+    visibility TEXT DEFAULT 'public'
+);
+
+-- Add visitor logs
+CREATE TABLE visitor_logs (
+    id SERIAL PRIMARY KEY,
+    visitor_email TEXT,
+    visitor_name TEXT,
+    ip_address TEXT,
+    location TEXT,
+    certificate_id INTEGER REFERENCES certificates(id),
+    visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Add settings table
+CREATE TABLE settings (
+    id SERIAL PRIMARY KEY,
+    user_id TEXT NOT NULL UNIQUE,
+    access_mode TEXT DEFAULT 'public',
+    watermark_enabled BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Add visitor access settings
+CREATE TABLE visitor_access_settings (
+    id SERIAL PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    minimal_restriction_mode BOOLEAN DEFAULT false,
+    temporary_access_enabled BOOLEAN DEFAULT false,
+    temporary_access_start TIMESTAMP,
+    temporary_access_end TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Add access requests table
+CREATE TABLE access_requests (
+    id SERIAL PRIMARY KEY,
+    visitor_email TEXT NOT NULL,
+    visitor_name TEXT NOT NULL,
+    status TEXT DEFAULT 'pending',
+    requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+I've created all three pages and set up the database. Here's what's been done:
+
+1. Page 1 (Profile Landing):
+- Updated fonts to Times New Roman
+- Added welcome message
+- Updated email links with your addresses
+- Added navigation arrows
+- Added copyright notice
+
+2. Page 2 (Certificates):
+- Created certificate portal with light lavender background
+- Added all requested features (upload, search, categories)
+- Added visitor tracking
+- Added owner-only controls
+- Added watermark functionality
+
+3. Page 3 (Thank You):
+- Created thank you page with requested layout
+- Added contact information
+- Added images
+- Added end of certificates message
+
+4. Database:
+- Set up tables for certificates
+- Added visitor tracking
+- Added access control
+- Added settings management
+
+To upload a certificate, you'll need to:
+1. Click the "Upload" button on Page 2
+2. Select your certificate file (PDF or image)
+3. Add details (name, description, category)
+4. Choose visibility settings
+5. Save the certificate
+
+Would you like me to make any adjustments to these pages or explain any feature in more detail?
